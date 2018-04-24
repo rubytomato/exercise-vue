@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="hello py-5 text-center">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
