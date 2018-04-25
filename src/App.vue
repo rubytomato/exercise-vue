@@ -2,12 +2,26 @@
   <main id="app">
     <img src="./assets/logo.png">
     <div>
-      <router-link to="/">Go to Home</router-link>
-      <router-link to="/memo">Go to Memo</router-link>
+      <router-link to="/" class="badge badge-primary">Go to Home</router-link>
+      <router-link to="/memo" class="badge badge-primary">Go to Memo</router-link>
+      <router-link to="/grid" class="badge badge-primary">Go to Grid</router-link>
     </div>
     <p>{{ getRouteInfo }}</p>
     <transition name="fade" mode="out-in">
-    <router-view/>
+    <router-view>
+      <div slot="header" class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Fluid jumbotron</h1>
+          <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+        </div>
+      </div>
+      <div slot="footer" class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Well done!</h4>
+        <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+        <hr>
+        <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+      </div>
+    </router-view>
     </transition>
   </main>
 </template>
@@ -34,8 +48,12 @@ export default {
   margin-top: 60px;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 body {
-  padding-top: 5rem;
+  padding: 1rem;
 }
 
 .container {

@@ -90,6 +90,12 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  created () {
+    console.log('created!')
+  },
+  updated () {
+    console.log('updated!')
   }
 }
 </script>

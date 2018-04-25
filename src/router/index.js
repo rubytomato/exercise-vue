@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import MemoList from '@/components/MemoList'
+import GridView from '@/components/GridView'
 
 Vue.use(Router)
 
@@ -21,6 +22,14 @@ const router = new Router({
       component: MemoList,
       meta: {
         title: 'memo linst'
+      }
+    },
+    {
+      path: '/grid',
+      name: 'GridView',
+      component: GridView,
+      meta: {
+        title: 'grid view'
       }
     }
   ]

@@ -1,7 +1,9 @@
 <template>
-  <div class="memo py-5 text-center">
-    <h1>{{ title }}</h1>
-    <div class="row">
+  <div class="memo card">
+    <div class="card-header">
+      <h1 class="card-title">{{ title }}</h1>
+    </div>
+    <div class="card-body">
       <b-table striped hover :items="memos" :fields="fields" />
     </div>
   </div>
@@ -30,5 +32,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
