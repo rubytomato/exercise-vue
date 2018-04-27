@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import MemoList from '@/components/MemoList'
-import GridView from '@/components/GridView'
+import HelloWorld from '@/pages/HelloWorld'
+import MemoList from '@/pages/MemoList'
+import MemoDetails from '@/pages/MemoDetails'
+import GridView from '@/pages/GridView'
+import CheckOut from '@/pages/CheckOut'
 
 Vue.use(Router)
 
@@ -17,27 +19,51 @@ const router = new Router({
       }
     },
     {
-      path: '/memo',
+      path: '/memo-list',
       name: 'MemoList',
       component: MemoList,
       meta: {
-        title: 'memo linst'
+        title: 'memo list'
       }
     },
     {
-      path: '/grid',
+      path: '/memo/:id',
+      name: 'MemoDetails',
+      component: MemoDetails,
+      meta: {
+        title: 'details of memo'
+      }
+    },
+    {
+      path: '/grid-view',
       name: 'GridView',
       component: GridView,
       meta: {
         title: 'grid view'
       }
+    },
+    {
+      path: '/check-out',
+      name: 'CheckOut',
+      component: CheckOut,
+      meta: {
+        title: 'check out'
+      }
+    },
+    {
+      path: '*',
+      redirect: HelloWorld
     }
   ]
 })
 
 router.afterEach((to, from) => {
   if (to.meta && to.meta.title) {
-    document.title = to.meta.title
+    if (to.params && to.params.id) {
+      document.title = `${to.meta.title} # ${to.params.id}`
+    } else {
+      document.title = to.meta.title
+    }
   }
 })
 

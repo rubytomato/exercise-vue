@@ -13,6 +13,7 @@
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.8",
     "vue": "^2.5.2",
+    "vue-moment": "^3.2.0",
     "vue-popperjs": "^1.2.6",
     "vue-router": "^3.0.1"
   },

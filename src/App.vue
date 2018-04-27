@@ -1,18 +1,26 @@
 <template>
   <main id="app">
-    <img src="./assets/logo.png">
-    <div>
-      <router-link to="/" class="badge badge-primary">Go to Home</router-link>
-      <router-link to="/memo" class="badge badge-primary">Go to Memo</router-link>
-      <router-link to="/grid" class="badge badge-primary">Go to Grid</router-link>
+    <div class="header mb-3">
+      <div>
+        <router-link to="/" class="badge badge-primary">Home</router-link>
+        <router-link to="/memo-list" class="badge badge-primary">Memo List</router-link>
+        <router-link to="/grid-view" class="badge badge-primary">Grid View</router-link>
+        <router-link to="/check-out" class="badge badge-primary">Check Out</router-link>
+      </div>
+      <div>
+        <p>{{ currentDateToString }}</p>
+        <p>{{ days }} / {{ hours }} : {{ minutes }} : {{ seconds }}</p>
+      </div>
     </div>
-    <p>{{ getRouteInfo }}</p>
     <transition name="fade" mode="out-in">
     <router-view>
-      <div slot="header" class="jumbotron jumbotron-fluid">
+      <div slot="header" class="jumbotron jumbotron-fluid" slot-scope="slotProps">
         <div class="container">
-          <h1 class="display-4">Fluid jumbotron</h1>
-          <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+          <figure class="figure">
+            <img src="./assets/logo.png" class="figure-img img-fluid rounded">
+            <figcaption class="figure-caption">Vue.js Logo.</figcaption>
+          </figure>
+          <p class="lead">{{ slotProps.title }}</p>
         </div>
       </div>
       <div slot="footer" class="alert alert-success" role="alert">
@@ -29,10 +37,37 @@
 <script>
 export default {
   name: 'App',
+  data () {
+    return {
+      startDate: this.getCurrentTime(),
+      currentDate: this.getCurrentTime()
+    }
+  },
+  mounted () {
+    window.setInterval(() => {
+      this.currentDate = this.getCurrentTime()
+    }, 1000)
+  },
+  methods: {
+    getCurrentTime () {
+      return Math.trunc(new Date().getTime() / 1000)
+    }
+  },
   computed: {
-    getRouteInfo () {
-      console.log(this)
-      return `${this.$route.name} : ${this.$route.path}`
+    currentDateToString () {
+      return this.$moment(this.currentDate * 1000).locale('ja').format('YYYY/MM/DD a hh:mm:ss')
+    },
+    seconds () {
+      return (this.currentDate - this.startDate) % 60
+    },
+    minutes () {
+      return Math.trunc((this.currentDate - this.startDate) / 60) % 60
+    },
+    hours () {
+      return Math.trunc((this.currentDate - this.startDate) / 60 / 60) % 24
+    },
+    days () {
+      return Math.trunc((this.currentDate - this.startDate) / 60 / 60 / 24)
     }
   }
 }
@@ -43,9 +78,8 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 10px;
 }
 
 html {
@@ -54,10 +88,6 @@ html {
 
 body {
   padding: 1rem;
-}
-
-.container {
-  max-width: 960px;
 }
 
 .border-top {
@@ -87,5 +117,14 @@ body {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.header {
+  text-align: center;
+}
+
+.card {
+  margin-left: 2px;
+  margin-right: 2px;
 }
 </style>
