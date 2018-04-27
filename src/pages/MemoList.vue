@@ -7,14 +7,14 @@
       </div>
     </div>
     <div class="row justify-content-start">
-      <memo-list-card v-for="(memo, index) in memos" v-bind:memo="memo" :key="index"/>
-      <memo-list-form v-bind:nextId="nextId" v-on:addMemo="addMemo"/>
+      <memo-list-card v-for="(memo, index) in memos" v-bind:memo="memo" v-bind:key="index"/>
+      <memo-list-form/>
     </div>
     <div class="row">
-      <button class="btn-sm btn-dark m-1" v-for="(memo, index) in memos" :key="index" v-on:click="removeMemo(index)">{{ memo.id }}</button>
+      <button class="btn-sm btn-dark m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="removeMemo(index)">{{ memo.id }}</button>
     </div>
     <div class="row">
-      <button class="btn-sm btn-light m-1" v-for="(memo, index) in memos" :key="index" v-on:click="toggleDone(index)">{{ memo.id }}</button>
+      <button class="btn-sm btn-light m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="toggleDone(index)">{{ memo.id }}</button>
     </div>
     <slot name="footer"/>
   </div>
@@ -33,33 +33,36 @@ export default {
   data () {
     return {
       title: 'Memo List',
-      titleToggle: true,
-      memos: [],
-      nextId: 8
+      titleToggle: true
     }
   },
   created () {
-    console.log(this.getRouteInfo())
-    this.memos = [
-      { id: 1, title: 'Card title that wraps to a new line', description: 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', done: true, updateAt: new Date() },
-      { id: 2, title: 'Someone famous in Source Title', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.', done: false, updateAt: new Date() },
-      { id: 3, title: 'Card title', description: 'This card has supporting text below as a natural lead-in to additional content.', done: false, updateAt: new Date() },
-      { id: 4, title: 'memo4', description: 'desc4', done: false, updateAt: new Date() },
-      { id: 5, title: 'memo5', description: 'desc5', done: false, updateAt: new Date() },
-      { id: 6, title: 'memo6', description: 'desc6', done: false, updateAt: new Date() },
-      { id: 7, title: 'memo7', description: 'desc7', done: false, updateAt: new Date() }
-    ]
+    console.log(this.routeInfo)
   },
+  // 再描画が起きると常に関数を実行
+  // ミューテーションやアクション
   methods: {
     removeMemo (index) {
-      this.memos.splice(index, 1)
+      this.$store.commit('removeMemo', index)
     },
     toggleDone (index) {
-      this.memos[index].done = !this.memos[index].done
+      this.$store.commit('toggleMemo', index)
     },
     addMemo (memo) {
-      this.memos.push(memo)
-      this.nextId++
+      this.$store.commit('addMemo', memo)
+    }
+  },
+  // computedは結果がキャッシュされる
+  // getterには引数は渡せない
+  // ステートやゲッター
+  computed: {
+    memos: {
+      get () {
+        return this.$store.getters.memos
+      },
+      set (_memos) {
+        // _nothing
+      }
     }
   },
   watch: {

@@ -25,13 +25,11 @@ export default {
   name: 'MemoDetails',
   data () {
     return {
-      title: `Details of Memo # ${this.$route.params.id}`,
-      memo: { id: 1, title: 'Card title that wraps to a new line', description: 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.', done: true, updateAt: new Date() },
-      id: this.$route.params.id
+      title: `Details of Memo # ${this.$route.params.id}`
     }
   },
   created () {
-    console.log(this.getRouteInfo())
+    console.log(this.routeInfo)
   },
   methods: {
     backToList () {
@@ -39,11 +37,23 @@ export default {
     }
   },
   computed: {
-    formatedUpdateAt () {
-      if (!this.memo.updateAt) {
-        return ''
+    memo () {
+      if (!this.$route.params || !this.$route.params.id) {
+        return
       }
-      return this.$moment(this.memo.updateAt).format('YYYY/MM/DD a hh:mm:ss')
+      var id = parseInt(this.$route.params.id, 10)
+      return this.$store.getters.memo(id)
+    },
+    formatedUpdateAt: {
+      get () {
+        if (!this.memo.updateAt) {
+          return ''
+        }
+        return this.$moment(this.memo.updateAt).format('YYYY/MM/DD a hh:mm:ss')
+      },
+      set (_updateAt) {
+        // nothing
+      }
     }
   },
   // filterの中ではthisは使えない

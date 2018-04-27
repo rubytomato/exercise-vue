@@ -20,24 +20,13 @@ export default {
       memo: this.emptyMemo()
     }
   },
-  props: {
-    'nextId': {
-      type: Number,
-      required: true
-    }
-  },
-  created () {
-    console.log(this.getRouteInfo())
-  },
   methods: {
     addMemo () {
       if (!this.memo.title || !this.memo.description) {
         return
       }
-      this.memo.id = this.nextId
-      this.memo.updateAt = new Date()
-      this.$emit('addMemo', this.memo)
       console.dir(this.memo)
+      this.$store.commit('addMemo', this.memo)
       this.memo = this.emptyMemo()
     },
     emptyMemo () {

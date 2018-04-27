@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import moment from 'vue-moment'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -14,8 +15,15 @@ Vue.use(BootstrapVue)
 // global mixin
 Vue.mixin({
   methods: {
-    getRouteInfo () {
-      return `${this.$route.name} : ${this.$route.path}`
+  },
+  computed: {
+    routeInfo: {
+      get () {
+        return `${this.$route.name} : ${this.$route.path}`
+      },
+      set () {
+        // nothing
+      }
     }
   }
 })
@@ -25,7 +33,8 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  'router': router,
+  'store': store,
   components: { App },
   template: '<App/>'
 })

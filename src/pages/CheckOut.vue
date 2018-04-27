@@ -220,7 +220,7 @@ export default {
     }
   },
   created () {
-    console.log(this.getRouteInfo())
+    console.log(this.routeInfo)
   },
   methods: {
     submit () {

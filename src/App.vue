@@ -10,6 +10,7 @@
       <div>
         <p>{{ currentDateToString }}</p>
         <p>{{ days }} / {{ hours }} : {{ minutes }} : {{ seconds }}</p>
+        <p>{{ message }}</p>
       </div>
     </div>
     <transition name="fade" mode="out-in">
@@ -68,6 +69,9 @@ export default {
     },
     days () {
       return Math.trunc((this.currentDate - this.startDate) / 60 / 60 / 24)
+    },
+    message () {
+      return this.$store.getters.message
     }
   }
 }
