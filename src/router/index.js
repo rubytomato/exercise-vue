@@ -4,6 +4,7 @@ import HelloWorld from '@/pages/HelloWorld'
 import MemoList from '@/pages/MemoList'
 import MemoDetails from '@/pages/MemoDetails'
 import GridView from '@/pages/GridView'
+import PopperView from '@/pages/PopperView'
 import CheckOut from '@/pages/CheckOut'
 
 Vue.use(Router)
@@ -40,6 +41,14 @@ const router = new Router({
       component: GridView,
       meta: {
         title: 'grid view'
+      }
+    },
+    {
+      path: '/popper-view',
+      name: 'PopperView',
+      component: PopperView,
+      meta: {
+        title: 'popper view'
       }
     },
     {

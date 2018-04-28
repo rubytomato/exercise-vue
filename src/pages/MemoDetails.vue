@@ -6,13 +6,27 @@
         <div class="card">
           <div class="card-header text-left">
             <h5 class="card-title">{{ memo.title }}</h5>
+            <h6 class="card-subtitle text-muted">Platform:
+              <a href="#" class="badge" style="margin-left:4px;"
+                v-bind:class="targetPlatform(platform)"
+                v-on:click.prevent="togglePlatform(platform)"
+                v-for="(platform, index) in platforms"
+                v-bind:key="index">
+                {{ platform }}
+              </a>
+            </h6>
           </div>
           <div class="card-body text-left">
-            <p class="card-text">{{ memo.description }}</p>
-            <button v-on:click="backToList" class="btn btn-primary">Back to List</button>
+            <p class="card-text" v-html="formatedDescription"/>
+            <hr class="mb-3">
+            <small>Release Date. {{ formatedReleaseDate }}</small>
           </div>
           <div class="card-footer text-right">
-            <p class="text-text">{{ formatedUpdateAt }}</p>
+            <button v-on:click="togglePlay" class="btn" v-bind:class="{'btn-primary': memo.done, 'btn-success': !memo.done}">
+              <span v-if="!memo.done">to Played</span>
+              <span v-else>to Unplayed</span>
+            </button>
+            <button v-on:click="backToList" class="btn btn-primary">Back to List</button>
           </div>
         </div>
       </div>
@@ -25,7 +39,8 @@ export default {
   name: 'MemoDetails',
   data () {
     return {
-      title: `Details of Memo # ${this.$route.params.id}`
+      title: `Details of Memo # ${this.$route.params.id}`,
+      platforms: ['FC', 'SFC', 'GB', '64', 'GC', 'DS', 'Wii', '3DS', 'Wii U', 'Switch']
     }
   },
   created () {
@@ -34,6 +49,18 @@ export default {
   methods: {
     backToList () {
       this.$router.push({name: 'MemoList'})
+    },
+    togglePlay () {
+      this.$store.commit('toggleMemo', this.memo.id)
+    },
+    togglePlatform (_platform) {
+      this.$store.commit('togglePlatform', {id: this.memo.id, platform: _platform})
+    },
+    targetPlatform (_platform) {
+      if (this.memo.platforms.length === 0) {
+        return 'badge-dark'
+      }
+      return this.memo.platforms.includes(_platform) ? 'badge-info' : 'badge-dark'
     }
   },
   computed: {
@@ -42,17 +69,24 @@ export default {
         return
       }
       var id = parseInt(this.$route.params.id, 10)
-      return this.$store.getters.memo(id)
+      return this.$store.getters.memoById(id)
     },
-    formatedUpdateAt: {
+    formatedDescription: {
+      get () {
+        var desc = this.memo.description.replace('『', '<span class="badge-lg badge-pill badge-success p-1">').replace('』', '</span>')
+        return desc
+      }
+    },
+    formatedReleaseDate: {
       get () {
         if (!this.memo.updateAt) {
           return ''
         }
-        return this.$moment(this.memo.updateAt).format('YYYY/MM/DD a hh:mm:ss')
+        return this.$moment(this.memo.updateAt).format('YYYY/MM/DD')
       },
       set (_updateAt) {
         // nothing
+        throw Error('unsupported')
       }
     }
   },

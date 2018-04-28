@@ -34,6 +34,7 @@ export default {
         id: 0,
         title: '',
         description: '',
+        platforms: [],
         done: false,
         updateAt: null
       }

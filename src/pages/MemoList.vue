@@ -2,19 +2,14 @@
   <div class="memo-list container-fluent">
     <slot name="header" v-bind:title="title" />
     <div class="row justify-content-start">
-      <div class="col mb-1">
-        <button class="btn btn-danger" v-on:click="titleToggle = !titleToggle">toggle</button>
-      </div>
-    </div>
-    <div class="row justify-content-start">
       <memo-list-card v-for="(memo, index) in memos" v-bind:memo="memo" v-bind:key="index"/>
       <memo-list-form/>
     </div>
     <div class="row">
-      <button class="btn-sm btn-dark m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="removeMemo(index)">{{ memo.id }}</button>
+      <button class="btn-sm btn-dark m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="removeMemo(memo.id)">{{ memo.id }}</button>
     </div>
     <div class="row">
-      <button class="btn-sm btn-light m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="toggleDone(index)">{{ memo.id }}</button>
+      <button class="btn-sm btn-light m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="toggleMemo(memo.id)">{{ memo.id }}</button>
     </div>
     <slot name="footer"/>
   </div>
@@ -32,8 +27,7 @@ export default {
   },
   data () {
     return {
-      title: 'Memo List',
-      titleToggle: true
+      title: 'Memo List'
     }
   },
   created () {
@@ -42,14 +36,14 @@ export default {
   // 再描画が起きると常に関数を実行
   // ミューテーションやアクション
   methods: {
-    removeMemo (index) {
-      this.$store.commit('removeMemo', index)
+    addMemo (_memo) {
+      this.$store.commit('addMemo', _memo)
     },
-    toggleDone (index) {
-      this.$store.commit('toggleMemo', index)
+    removeMemo (_id) {
+      this.$store.commit('removeMemo', _id)
     },
-    addMemo (memo) {
-      this.$store.commit('addMemo', memo)
+    toggleMemo (_id) {
+      this.$store.commit('toggleMemo', _id)
     }
   },
   // computedは結果がキャッシュされる
@@ -61,16 +55,8 @@ export default {
         return this.$store.getters.memos
       },
       set (_memos) {
-        // _nothing
-      }
-    }
-  },
-  watch: {
-    'titleToggle' (n, o) {
-      if (n) {
-        this.title = this.title.toLowerCase()
-      } else {
-        this.title = this.title.toUpperCase()
+        // nothing
+        throw Error('unsupported')
       }
     }
   }

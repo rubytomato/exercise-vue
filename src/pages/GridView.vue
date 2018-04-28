@@ -1,22 +1,21 @@
 <template>
   <div class="grid-view container-fluent text-center">
     <slot name="header" v-bind:title="title" />
-    <popper trigger="click" v-bind:options="{placement: 'top'}">
-      <div class="popper">
-        Popper Content
+    <div class="row justify-content-start">
+      <div class="col">
+        <button class="btn btn-danger" v-on:click="titleToggle = !titleToggle">toggle</button>
       </div>
-      <button slot="reference">
-        Reference Element
-      </button>
-    </popper>
-    <div>
-      <b-dropdown id="ddown-header" text="Dropdown with header" class="m-md-2" toggle-class="btn btn-danger">  <!--toggle-class="btn btn-danger"-->
-        <b-dropdown-header>Dropdown header</b-dropdown-header>
-        <b-dropdown-item-button>First item</b-dropdown-item-button>
-        <b-dropdown-item-button>Second Item</b-dropdown-item-button>
-      </b-dropdown>
     </div>
-    <div>
+    <div class="row justify-content-start">
+      <div class="col">
+        <b-dropdown id="ddown-header" text="Dropdown with header" class="m-md-2" toggle-class="btn btn-danger">
+          <b-dropdown-header>Dropdown header</b-dropdown-header>
+          <b-dropdown-item-button>First item</b-dropdown-item-button>
+          <b-dropdown-item-button>Second Item</b-dropdown-item-button>
+        </b-dropdown>
+      </div>
+    </div>
+    <div class="row">
       <div class="card-body">
         <div class="row">
           <div class="col-sm">
@@ -59,21 +58,25 @@
 </template>
 
 <script>
-import Popper from 'vue-popperjs'
-import 'vue-popperjs/dist/css/vue-popper.css'
-
 export default {
   name: 'GridView',
-  components: {
-    Popper: Popper
-  },
   data () {
     return {
-      title: 'Grid View'
+      title: 'Grid View',
+      titleToggle: true
     }
   },
   created () {
     console.log(this.routeInfo)
+  },
+  watch: {
+    'titleToggle' (n, o) {
+      if (n) {
+        this.title = this.title.toLowerCase()
+      } else {
+        this.title = this.title.toUpperCase()
+      }
+    }
   }
 }
 </script>
@@ -85,6 +88,5 @@ export default {
 .col-sm,
 .col {
   margin: 1px;
-  background: coral;
 }
 </style>

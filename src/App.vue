@@ -5,12 +5,12 @@
         <router-link to="/" class="badge badge-primary">Home</router-link>
         <router-link to="/memo-list" class="badge badge-primary">Memo List</router-link>
         <router-link to="/grid-view" class="badge badge-primary">Grid View</router-link>
+        <router-link to="/popper-view" class="badge badge-primary">Popper View</router-link>
         <router-link to="/check-out" class="badge badge-primary">Check Out</router-link>
       </div>
       <div>
         <p>{{ currentDateToString }}</p>
-        <p>{{ days }} / {{ hours }} : {{ minutes }} : {{ seconds }}</p>
-        <p>{{ message }}</p>
+        <p>uptime: {{ days }} days. {{ hours }} hours {{ minutes }} min {{ seconds }} sec</p>
       </div>
     </div>
     <transition name="fade" mode="out-in">
@@ -69,9 +69,6 @@ export default {
     },
     days () {
       return Math.trunc((this.currentDate - this.startDate) / 60 / 60 / 24)
-    },
-    message () {
-      return this.$store.getters.message
     }
   }
 }
