@@ -1,6 +1,6 @@
 <template>
   <div class="memo-list container-fluent">
-    <slot name="header" v-bind:title="title" />
+    <!-- <slot name="header" v-bind:title="title" /> -->
     <div class="row justify-content-start">
       <memo-list-card v-for="(memo, index) in memos" v-bind:memo="memo" v-bind:key="index"/>
       <memo-list-form/>
@@ -11,7 +11,7 @@
     <div class="row">
       <button class="btn-sm btn-light m-1" v-for="(memo, index) in memos" v-bind:key="index" v-on:click="toggleMemo(memo.id)">{{ memo.id }}</button>
     </div>
-    <slot name="footer"/>
+    <!-- <slot name="footer"/> -->
   </div>
 </template>
 
@@ -40,10 +40,10 @@ export default {
       this.$store.commit('addMemo', _memo)
     },
     removeMemo (_id) {
-      this.$store.commit('removeMemo', _id)
+      this.$store.commit('removeMemo', parseInt(_id, 10))
     },
     toggleMemo (_id) {
-      this.$store.commit('toggleMemo', _id)
+      this.$store.commit('toggleMemo', parseInt(_id, 10))
     }
   },
   // computedは結果がキャッシュされる

@@ -27,6 +27,9 @@ export default {
       title: 'Popper View',
       titleToggle: true
     }
+  },
+  created () {
+    console.log(this.routeInfo)
   }
 }
 </script>

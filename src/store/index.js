@@ -64,7 +64,11 @@ const store = new Vuex.Store({
     },
     memoById (state) {
       return function (_id) {
-        return state.memos.find(memo => memo.id === _id)
+        var memo = state.memos.find(memo => memo.id === _id)
+        if (memo) {
+          return memo
+        }
+        return {id: _id, title: 'unknown', description: 'unknown', platforms: [], done: false, updateAt: new Date()}
       }
     }
   },

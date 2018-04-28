@@ -1,5 +1,5 @@
 <template>
-  <div class="card p-2 mb-2 float-lg-left" style="width: 20rem;" v-bind:class="{ 'border-primary': !memo.done, 'border-success': memo.done }">
+  <div class="card p-2 mb-2 float-lg-left" style="width: 18rem;" v-bind:class="{ 'border-primary': !memo.done, 'border-success': memo.done }">
     <div class="card-header text-left">
       <router-link :to="{name: 'MemoDetails', params:{ id: memo.id }}" v-bind:class="{ 'btn-sm btn-primary': !memo.done, 'btn-sm btn-success': memo.done }">{{ memo.id }}</router-link>
       <span class="card-title">{{ title }}</span>

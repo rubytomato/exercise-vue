@@ -13,7 +13,7 @@
         <p>uptime: {{ days }} days. {{ hours }} hours {{ minutes }} min {{ seconds }} sec</p>
       </div>
     </div>
-    <transition name="fade" mode="out-in">
+    <!-- <transition name="fade" mode="out-in"> -->
     <router-view>
       <div slot="header" class="jumbotron jumbotron-fluid" slot-scope="slotProps">
         <div class="container">
@@ -31,7 +31,7 @@
         <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
       </div>
     </router-view>
-    </transition>
+    <!-- </transition> -->
   </main>
 </template>
 

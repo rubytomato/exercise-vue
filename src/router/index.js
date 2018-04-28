@@ -31,6 +31,7 @@ const router = new Router({
       path: '/memo/:id',
       name: 'MemoDetails',
       component: MemoDetails,
+      props: true,
       meta: {
         title: 'details of memo'
       }
@@ -61,9 +62,14 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: HelloWorld
+      redirect: {
+        name: 'HelloWorld'
+      }
     }
-  ]
+  ],
+  scrollBehavior: (to, from, savedPosition) => {
+    return savedPosition || { x: 0, y: 0 }
+  }
 })
 
 router.afterEach((to, from) => {

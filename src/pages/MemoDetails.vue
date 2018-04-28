@@ -1,6 +1,6 @@
 <template>
   <div class="details container-fluent text-center">
-    <slot name="header" v-bind:title="title" />
+    <!-- <slot name="header" v-bind:title="title" /> -->
     <div class="row justify-content-start">
       <div class="col">
         <div class="card">
@@ -26,7 +26,7 @@
               <span v-if="!memo.done">to Played</span>
               <span v-else>to Unplayed</span>
             </button>
-            <button v-on:click="backToList" class="btn btn-primary">Back to List</button>
+            <router-link v-bind:to="{name: 'MemoList'}" class="btn btn-primary" tag="button">Back to List</router-link>
           </div>
         </div>
       </div>
@@ -39,17 +39,19 @@ export default {
   name: 'MemoDetails',
   data () {
     return {
-      title: `Details of Memo # ${this.$route.params.id}`,
-      platforms: ['FC', 'SFC', 'GB', '64', 'GC', 'DS', 'Wii', '3DS', 'Wii U', 'Switch']
+      platforms: ['FC', 'SFC', 'GB', '64', 'GC', 'DS', 'Wii', '3DS', 'Wii U', 'Switch'],
+      targetId: this.id
     }
   },
+  props: ['id'],
   created () {
     console.log(this.routeInfo)
   },
+  beforeRouteUpdate (to, from, next) {
+    this.targetId = to.params.id
+    next()
+  },
   methods: {
-    backToList () {
-      this.$router.push({name: 'MemoList'})
-    },
     togglePlay () {
       this.$store.commit('toggleMemo', this.memo.id)
     },
@@ -65,11 +67,15 @@ export default {
   },
   computed: {
     memo () {
-      if (!this.$route.params || !this.$route.params.id) {
-        return
+      if (this.targetId) {
+        return this.$store.getters.memoById(parseInt(this.targetId, 10))
       }
-      var id = parseInt(this.$route.params.id, 10)
-      return this.$store.getters.memoById(id)
+      return {id: -1, title: 'unknown', description: 'unknown', platforms: [], done: false, updateAt: new Date()}
+    },
+    title: {
+      get () {
+        return `Details of Memo # ${this.targetId}`
+      }
     },
     formatedDescription: {
       get () {
@@ -101,8 +107,8 @@ export default {
   // },
   watch: {
     '$route' (to, from) {
-      console.dir(to)
-      console.dir(from)
+      // console.dir(to)
+      // console.dir(from)
     }
   }
 }

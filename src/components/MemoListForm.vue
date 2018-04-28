@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-2 float-lg-left" style="width: 20rem;">
+  <div class="card mb-2 float-lg-left" style="width: 18rem;">
     <div class="card-header text-left">
       <input v-model.trim="memo.title" type="text" class="form-control" placeholder="title">
     </div>
