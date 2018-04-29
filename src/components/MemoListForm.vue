@@ -1,18 +1,25 @@
 <template>
   <div class="card mb-2 float-lg-left" style="width: 18rem;">
     <div class="card-header text-left">
-      <input v-model.trim="memo.title" type="text" class="form-control" placeholder="title">
+      <input type="text" class="form-control" placeholder="title"
+        v-model.trim="memo.title">
     </div>
     <div class="card-body text-left">
-      <textarea v-model.trim="memo.description" class="form-control" placeholder="description"/>
+      <textarea class="form-control" placeholder="description"
+        v-model.trim="memo.description"/>
     </div>
     <div class="card-footer text-right">
-      <button class="btn-sm btn-secondary" type="submit" @click.prevent="addMemo">add</button>
+      <button class="btn-sm btn-secondary" type="submit"
+        v-on:click.prevent="addMemo">
+        add
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import CONSTANTS from '@/constants'
+
 export default {
   name: 'MemoListForm',
   data () {
@@ -26,18 +33,14 @@ export default {
         return
       }
       console.dir(this.memo)
+      this.memo.platforms = []
+      this.memo.million = false
+      this.memo.releasedAt = new Date()
       this.$store.commit('addMemo', this.memo)
       this.memo = this.emptyMemo()
     },
     emptyMemo () {
-      return {
-        id: 0,
-        title: '',
-        description: '',
-        platforms: [],
-        done: false,
-        updateAt: null
-      }
+      return CONSTANTS.NEW_EMPTY_MEMO()
     }
   },
   watch: {

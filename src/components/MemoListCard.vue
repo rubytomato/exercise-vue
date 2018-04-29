@@ -1,19 +1,25 @@
 <template>
-  <div class="card p-2 mb-2 float-lg-left" style="width: 18rem;" v-bind:class="{ 'border-primary': !memo.done, 'border-success': memo.done }">
+  <div class="card p-2 mb-2 float-lg-left" style="width: 18rem;" v-bind:class="{ 'border-primary': !memo.million, 'border-success': memo.million }">
     <div class="card-header text-left">
-      <router-link :to="{name: 'MemoDetails', params:{ id: memo.id }}" v-bind:class="{ 'btn-sm btn-primary': !memo.done, 'btn-sm btn-success': memo.done }">{{ memo.id }}</router-link>
-      <span class="card-title">{{ title }}</span>
+      <router-link
+        v-bind:to="{name: 'MemoDetails', params:{ id: memo.id }}"
+        v-bind:class="{ 'btn-sm btn-primary': !memo.million, 'btn-sm btn-success': memo.million }">
+        {{ memo.id }}
+      </router-link>
+      <span class="card-title">{{ formatedTitle }}</span>
     </div>
-    <div class="card-body text-left" v-bind:class="{'text-primary': !memo.done, 'text-success': memo.done }">
-      <template v-if="memo.platforms.length > 0">
-        <span class="badge badge-info" style="margin-left: 2px;" v-for="(platform, index) in memo.platforms" :key="index">{{ platform }}</span>
-      </template>
-      <span class="card-text">{{ description }}</span>
+    <div class="card-body text-left" v-bind:class="{'text-primary': !memo.million, 'text-success': memo.million }">
+      <span class="badge badge-info" style="margin-left: 2px;"
+        v-for="(platform, index) in memo.platforms"
+        v-bind:key="index">
+        {{ platform }}
+      </span>
+      <span class="card-text">{{ formatedDescription }}</span>
     </div>
     <div class="card-footer text-right">
-      <small class="text-muted">Release </small>
-      <span>{{ releaseFromNow }}.</span>
-      <span v-if="memo.done" class="badge badge-success">Played</span>
+      <small class="text-muted">released at</small>
+      <span>{{ releasedAtFromNow }}.</span>
+      <span class="badge badge-success" v-show="memo.million">Million</span>
     </div>
   </div>
 </template>
@@ -23,12 +29,13 @@ export default {
   name: 'MemoListCard',
   data () {
     return {
-      releaseFromNow: this.getReleaseFromNow()
+      releasedAtFromNow: this.getReleasedAtFromNow()
     }
   },
   mounted () {
+    // releasedAtFromNowを1分ごとに更新する
     window.setInterval(() => {
-      this.releaseFromNow = this.getReleaseFromNow()
+      this.releasedAtFromNow = this.getReleasedAtFromNow()
     }, 1000 * 60)
   },
   props: {
@@ -38,13 +45,13 @@ export default {
     }
   },
   methods: {
-    getReleaseFromNow () {
-      if (!this.memo || !this.memo.updateAt) {
+    getReleasedAtFromNow () {
+      if (!this.memo || !this.memo.releasedAt) {
         return ''
       }
-      return this.$moment(this.memo.updateAt).fromNow()
+      return this.$moment(this.memo.releasedAt).fromNow()
     },
-    omissionAndPlusMidpoint (str, limit) {
+    getOmissionAndPlusMidpoint (str, limit) {
       if (str.length < limit) {
         return str
       }
@@ -52,29 +59,17 @@ export default {
     }
   },
   computed: {
-    title: {
-      get () {
-        if (!this.memo || !this.memo.title) {
-          return ''
-        }
-        return this.omissionAndPlusMidpoint(this.memo.title, 16)
-      },
-      set (_title) {
-        // nothing
-        throw Error('unsupported')
+    formatedTitle () {
+      if (!this.memo || !this.memo.title) {
+        return ''
       }
+      return this.getOmissionAndPlusMidpoint(this.memo.title, 16)
     },
-    description: {
-      get () {
-        if (!this.memo || !this.memo.description) {
-          return ''
-        }
-        return this.omissionAndPlusMidpoint(this.memo.description, 60)
-      },
-      set (_description) {
-        // nothing
-        throw Error('unsupported')
+    formatedDescription () {
+      if (!this.memo || !this.memo.description) {
+        return ''
       }
+      return this.getOmissionAndPlusMidpoint(this.memo.description, 60)
     }
   },
   watch: {

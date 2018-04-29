@@ -8,10 +8,10 @@
             <h5 class="card-title">{{ memo.title }}</h5>
             <h6 class="card-subtitle text-muted">Platform:
               <a href="#" class="badge" style="margin-left:4px;"
-                v-bind:class="targetPlatform(platform)"
-                v-on:click.prevent="togglePlatform(platform)"
                 v-for="(platform, index) in platforms"
-                v-bind:key="index">
+                v-bind:key="index"
+                v-bind:class="getTargetPlatformClass(platform)"
+                v-on:click.prevent="togglePlatform(platform)">
                 {{ platform }}
               </a>
             </h6>
@@ -19,14 +19,18 @@
           <div class="card-body text-left">
             <p class="card-text" v-html="formatedDescription"/>
             <hr class="mb-3">
-            <small>Release Date. {{ formatedReleaseDate }}</small>
+            <small>Release Date. {{ formatedReleasedAt }}</small>
           </div>
           <div class="card-footer text-right">
-            <button v-on:click="togglePlay" class="btn" v-bind:class="{'btn-primary': memo.done, 'btn-success': !memo.done}">
-              <span v-if="!memo.done">to Played</span>
-              <span v-else>to Unplayed</span>
+            <button class="btn"
+              v-bind:class="{'btn-primary': memo.million, 'btn-success': !memo.million}"
+              v-on:click="toggleMillion">
+              {{ millionButtonLabel }}
             </button>
-            <router-link v-bind:to="{name: 'MemoList'}" class="btn btn-primary" tag="button">Back to List</router-link>
+            <button class="btn btn-primary"
+              v-on:click="historyBack">
+              back
+            </button>
           </div>
         </div>
       </div>
@@ -35,67 +39,72 @@
 </template>
 
 <script>
+import CONSTANTS from '@/constants'
+
 export default {
   name: 'MemoDetails',
   data () {
     return {
-      platforms: ['FC', 'SFC', 'GB', '64', 'GC', 'DS', 'Wii', '3DS', 'Wii U', 'Switch'],
       targetId: this.id
     }
   },
+  // routeの動的セグメント
   props: ['id'],
   created () {
+    // for debug
     console.log(this.routeInfo)
   },
+  // pathの:idを直接書き換えたときの対応
   beforeRouteUpdate (to, from, next) {
     this.targetId = to.params.id
     next()
   },
   methods: {
-    togglePlay () {
-      this.$store.commit('toggleMemo', this.memo.id)
+    toggleMillion () {
+      this.$store.commit('toggleMillion', {id: this.memo.id})
     },
     togglePlatform (_platform) {
       this.$store.commit('togglePlatform', {id: this.memo.id, platform: _platform})
     },
-    targetPlatform (_platform) {
+    getTargetPlatformClass (_platform) {
       if (this.memo.platforms.length === 0) {
         return 'badge-dark'
       }
       return this.memo.platforms.includes(_platform) ? 'badge-info' : 'badge-dark'
+    },
+    historyBack () {
+      this.$router.back()
     }
   },
   computed: {
     memo () {
-      if (this.targetId) {
-        return this.$store.getters.memoById(parseInt(this.targetId, 10))
+      if (!this.targetId) {
+        console.error('invalid id')
+        return CONSTANTS.ERROR_MEMO
       }
-      return {id: -1, title: 'unknown', description: 'unknown', platforms: [], done: false, updateAt: new Date()}
+      return this.$store.getters.memoById(parseInt(this.targetId, 10))
     },
-    title: {
-      get () {
-        return `Details of Memo # ${this.targetId}`
-      }
+    platforms () {
+      return CONSTANTS.PLATFORMS
     },
-    formatedDescription: {
-      get () {
-        var desc = this.memo.description.replace('『', '<span class="badge-lg badge-pill badge-success p-1">').replace('』', '</span>')
-        return desc
+    formatedDescription () {
+      if (!this.memo.description) {
+        return ''
       }
+      return this.memo.description
+        .replace('『', '<span class="badge-lg badge-pill badge-success p-1">')
+        .replace('』', '</span>')
     },
-    formatedReleaseDate: {
-      get () {
-        if (!this.memo.updateAt) {
-          return ''
-        }
-        return this.$moment(this.memo.updateAt).format('YYYY/MM/DD')
-      },
-      set (_updateAt) {
-        // nothing
-        throw Error('unsupported')
+    formatedReleasedAt () {
+      if (!this.memo.releasedAt) {
+        return ''
       }
+      return this.$moment(this.memo.releasedAt).format('YYYY/MM/DD')
+    },
+    millionButtonLabel () {
+      return !this.memo.million ? 'is Million ?' : 'is not Million ?'
     }
-  },
+  }
   // filterの中ではthisは使えない
   // filters: {
   //   formatedUpdateAt (value) {
@@ -105,11 +114,11 @@ export default {
   //     return this.$moment(value).format('YYYY/MM/DD a hh:mm:ss')
   //   }
   // },
-  watch: {
-    '$route' (to, from) {
-      // console.dir(to)
-      // console.dir(from)
-    }
-  }
+  // watch: {
+  //   '$route' (to, from) {
+  //     console.dir(to)
+  //     console.dir(from)
+  //   }
+  // }
 }
 </script>
