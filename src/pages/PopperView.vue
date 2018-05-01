@@ -10,6 +10,12 @@
         </button>
       </popper>
     </div>
+    <div class="row">
+      <div class="col">
+        <p>{{ method1() }}</p>
+        <p>{{ method2='テスト' }}</p>
+      </div>)
+    </div>
   </div>
 </template>
 
@@ -25,11 +31,27 @@ export default {
   data () {
     return {
       title: 'Popper View',
-      titleToggle: true
+      titleToggle: true,
+      test: 'TEST'
     }
   },
   created () {
     console.log(this.routeInfo)
+  },
+  methods: {
+    method1 () {
+      return `method1: ${this.test}`
+    }
+  },
+  computed: {
+    method2: {
+      get () {
+        return `method2: ${this.test}`
+      },
+      set (val) {
+        this.test = val
+      }
+    }
   }
 }
 </script>

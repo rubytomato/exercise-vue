@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/pages/HelloWorld'
 import MemoList from '@/pages/MemoList'
 import MemoDetails from '@/pages/MemoDetails'
+import SimpleForm from '@/pages/SimpleForm'
 import GridView from '@/pages/GridView'
 import PopperView from '@/pages/PopperView'
 import CheckOut from '@/pages/CheckOut'
@@ -34,6 +35,14 @@ const router = new Router({
       props: true,
       meta: {
         title: 'details of memo'
+      }
+    },
+    {
+      path: '/simple-form',
+      name: 'SimpleForm',
+      component: SimpleForm,
+      meta: {
+        title: 'simple form'
       }
     },
     {

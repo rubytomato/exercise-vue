@@ -4,6 +4,7 @@
       <div>
         <router-link to="/" class="badge badge-primary">Home</router-link>
         <router-link to="/memo-list" class="badge badge-primary">Memo List</router-link>
+        <router-link v-bind:to="{name: 'SimpleForm'}" class="badge badge-primary">Simple Form</router-link>
         <router-link to="/grid-view" class="badge badge-primary">Grid View</router-link>
         <router-link to="/popper-view" class="badge badge-primary">Popper View</router-link>
         <router-link to="/check-out" class="badge badge-primary">Check Out</router-link>
