@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.8",
+    "firebase": "^4.13.1",
     "vue": "^2.5.2",
     "vue-moment": "^3.2.0",
     "vue-popperjs": "^1.2.6",

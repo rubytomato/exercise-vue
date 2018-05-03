@@ -36,7 +36,7 @@ export default {
       this.memo.platforms = []
       this.memo.million = false
       this.memo.releasedAt = new Date()
-      this.$store.commit('addMemo', this.memo)
+      this.$store.dispatch('addMemo', this.memo)
       this.memo = this.emptyMemo()
     },
     emptyMemo () {

@@ -81,6 +81,15 @@ const router = new Router({
   }
 })
 
+// グローバル before ガード
+router.beforeEach((to, from, next) => {
+  // to: Route: 次にナビゲーションされる対象の ルートオブジェクト
+  // from: Route: ナビゲーションされる前の現在のルート
+  // next: Function: フックを 解決 するためにこの関数を呼ぶ必要があります
+  next()
+})
+
+// グローバル After フック
 router.afterEach((to, from) => {
   if (to.meta && to.meta.title) {
     if (to.params && to.params.id) {

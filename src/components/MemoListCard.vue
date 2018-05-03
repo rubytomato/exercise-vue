@@ -2,11 +2,9 @@
   <div class="card p-2 mb-2 float-lg-left" style="width: 18rem;" v-bind:class="{ 'border-primary': !memo.million, 'border-success': memo.million }">
     <div class="card-header text-left">
       <router-link
-        v-bind:to="{name: 'MemoDetails', params:{ id: memo.id }}"
-        v-bind:class="{ 'btn-sm btn-primary': !memo.million, 'btn-sm btn-success': memo.million }">
-        {{ memo.id }}
+        v-bind:to="{name: 'MemoDetails', params:{ id: memo.id }}">
+        {{ formatedTitle }}
       </router-link>
-      <span class="card-title">{{ formatedTitle }}</span>
     </div>
     <div class="card-body text-left" v-bind:class="{'text-primary': !memo.million, 'text-success': memo.million }">
       <span class="badge badge-info" style="margin-left: 2px;"
@@ -74,7 +72,8 @@ export default {
   },
   watch: {
     'memo' (n, o) {
-      console.log('new: %s, old: %s', JSON.stringify(n), JSON.stringify(o))
+      // console.log('new: %s, old: %s', JSON.stringify(n), JSON.stringify(o))
+      console.log('watch memo')
     }
   }
 }

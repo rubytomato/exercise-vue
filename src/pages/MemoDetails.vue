@@ -1,6 +1,5 @@
 <template>
   <div class="details container-fluent text-center">
-    <!-- <slot name="header" v-bind:title="title" /> -->
     <div class="row justify-content-start">
       <div class="col">
         <div class="card">
@@ -11,7 +10,7 @@
                 v-for="(platform, index) in platforms"
                 v-bind:key="index"
                 v-bind:class="getTargetPlatformClass(platform)"
-                v-on:click.prevent="togglePlatform(platform)">
+                v-on:click.prevent="updatePlatform(platform)">
                 {{ platform }}
               </a>
             </h6>
@@ -24,7 +23,7 @@
           <div class="card-footer text-right">
             <button class="btn"
               v-bind:class="{'btn-primary': memo.million, 'btn-success': !memo.million}"
-              v-on:click="toggleMillion">
+              v-on:click="updateMillion()">
               {{ millionButtonLabel }}
             </button>
             <button class="btn btn-primary"
@@ -54,23 +53,54 @@ export default {
     // for debug
     console.log(this.routeInfo)
   },
-  // pathの:idを直接書き換えたときの対応
+  mounted () {
+    this.init()
+    this.start()
+  },
+  destroyed () {
+    this.stop()
+  },
+  // コンポーネント内ガード
+  // このコンポーネントを描画するルートが確立する前に呼ばれます
+  beforeRouteEnter (to, from, next) {
+  // `this` でのこのコンポーネントへのアクセスはできません
+    next()
+  },
+  // コンポーネント内ガード
+  // このコンポーネントを描画するルートが変更されたときに呼び出されます
   beforeRouteUpdate (to, from, next) {
+    // `this` でのコンポーネントインスタンスへのアクセスができます
+    // pathの:idを直接書き換えたときの対応
     this.targetId = to.params.id
     next()
   },
+  // コンポーネント内ガード
+  // このコンポーネントを描画するルートが間もなくナビゲーションから離れていく時に呼ばれます
+  beforeRouteLeave (to, from, next) {
+  // `this` でのコンポーネントインスタンスへのアクセスができます
+    next()
+  },
   methods: {
-    toggleMillion () {
-      this.$store.commit('toggleMillion', {id: this.memo.id})
+    init () {
+      this.$store.dispatch('clearMemo')
     },
-    togglePlatform (_platform) {
-      this.$store.commit('togglePlatform', {id: this.memo.id, platform: _platform})
+    start () {
+      this.$store.dispatch('startMemoListener', { id: this.targetId })
     },
-    getTargetPlatformClass (_platform) {
-      if (this.memo.platforms.length === 0) {
+    stop () {
+      this.$store.dispatch('stopMemosListener')
+    },
+    updateMillion () {
+      this.$store.dispatch('updateMillionOfMemo', { id: this.memo.id })
+    },
+    updatePlatform (platform) {
+      this.$store.dispatch('updatePlatformOfMemo', { id: this.memo.id, platform: platform })
+    },
+    getTargetPlatformClass (platform) {
+      if (!this.memo.platforms || this.memo.platforms.length === 0) {
         return 'badge-dark'
       }
-      return this.memo.platforms.includes(_platform) ? 'badge-info' : 'badge-dark'
+      return this.memo.platforms.includes(platform) ? 'badge-info' : 'badge-dark'
     },
     historyBack () {
       this.$router.back()
@@ -79,10 +109,9 @@ export default {
   computed: {
     memo () {
       if (!this.targetId) {
-        console.error('invalid id')
         return CONSTANTS.ERROR_MEMO
       }
-      return this.$store.getters.memoById(parseInt(this.targetId, 10))
+      return this.$store.getters.memo
     },
     platforms () {
       return CONSTANTS.PLATFORMS
@@ -105,20 +134,5 @@ export default {
       return !this.memo.million ? 'is Million ?' : 'is not Million ?'
     }
   }
-  // filterの中ではthisは使えない
-  // filters: {
-  //   formatedUpdateAt (value) {
-  //     if (!value) {
-  //       return ''
-  //     }
-  //     return this.$moment(value).format('YYYY/MM/DD a hh:mm:ss')
-  //   }
-  // },
-  // watch: {
-  //   '$route' (to, from) {
-  //     console.dir(to)
-  //     console.dir(from)
-  //   }
-  // }
 }
 </script>

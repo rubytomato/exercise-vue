@@ -1,6 +1,5 @@
 <template>
   <div class="memo-list container-fluent">
-    <!-- <slot name="header" v-bind:title="title" /> -->
     <div class="row justify-content-start">
       <memo-list-card
         v-for="(memo, index) in memos"
@@ -12,19 +11,18 @@
       <button class="btn-sm btn-dark m-1"
         v-for="(memo, index) in memos"
         v-bind:key="index"
-        v-on:click="removeMemo(memo.id)">
-        {{ memo.id }}
+        v-on:click="remove(memo.id)">
+        {{ index }}
       </button>
     </div>
     <div class="row">
       <button class="btn-sm btn-light m-1"
         v-for="(memo, index) in memos"
         v-bind:key="index"
-        v-on:click="toggleMillion(memo.id)">
-        {{ memo.id }}
+        v-on:click="updateMillion(memo.id)">
+        {{ index }}
       </button>
     </div>
-    <!-- <slot name="footer"/> -->
   </div>
 </template>
 
@@ -40,24 +38,40 @@ export default {
   },
   data () {
     return {
-      // title: 'Memo List'
     }
   },
   created () {
-    console.log(this.routeInfo)
+    console.log('created!!', this.routeInfo)
+  },
+  mounted () {
+    console.log('mounted !!')
+    this.init()
+    this.start()
+  },
+  destroyed () {
+    console.log('destroyed !!')
+    this.stop()
   },
   // 再描画が起きると常に関数を実行
   // ミューテーションやアクション
   methods: {
-    addMemo (_memo) {
-      // 第2引数はpalyload
-      this.$store.commit('addMemo', _memo)
+    init () {
+      this.$store.dispatch('clearMemos')
     },
-    removeMemo (_id) {
-      this.$store.commit('removeMemo', {id: parseInt(_id, 10)})
+    start () {
+      this.$store.dispatch('startMemosListener', { million: true })
     },
-    toggleMillion (_id) {
-      this.$store.commit('toggleMillion', {id: parseInt(_id, 10)})
+    stop () {
+      this.$store.dispatch('stopMemosListener')
+    },
+    search () {
+      console.log('メモを検索する')
+    },
+    remove (id) {
+      this.$store.dispatch('deleteMemo', { id })
+    },
+    updateMillion (id) {
+      this.$store.dispatch('updateMillionOfMemo', { id })
     }
   },
   // computedは結果がキャッシュされる
