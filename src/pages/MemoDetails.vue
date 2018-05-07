@@ -2,7 +2,7 @@
   <div class="details container-fluent text-center">
     <div class="row justify-content-start">
       <div class="col">
-        <div class="card">
+        <div class="card" v-if="memo.id">
           <div class="card-header text-left">
             <h5 class="card-title">{{ memo.title }}</h5>
             <h6 class="card-subtitle text-muted">Platform:
@@ -95,6 +95,9 @@ export default {
     },
     updatePlatform (platform) {
       this.$store.dispatch('memo/updatePlatforms', { platform: platform })
+        .then(() => {
+          console.log('memo/updatePlatforms')
+        })
     },
     getTargetPlatformClass (platform) {
       if (!this.memo.platforms || this.memo.platforms.length === 0) {

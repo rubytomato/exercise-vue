@@ -20,9 +20,6 @@ Vue.mixin({
     routeInfo: {
       get () {
         return `${this.$route.name} : ${this.$route.path}`
-      },
-      set () {
-        // nothing
       }
     }
   }
