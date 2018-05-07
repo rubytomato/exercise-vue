@@ -15,14 +15,6 @@
         {{ index }}
       </button>
     </div>
-    <div class="row">
-      <button class="btn-sm btn-light m-1"
-        v-for="(memo, index) in memos"
-        v-bind:key="index"
-        v-on:click="updateMillion(memo.id)">
-        {{ index }}
-      </button>
-    </div>
   </div>
 </template>
 
@@ -41,7 +33,7 @@ export default {
     }
   },
   created () {
-    console.log('created!!', this.routeInfo)
+    console.log('created !!', this.routeInfo)
   },
   mounted () {
     console.log('mounted !!')
@@ -56,22 +48,19 @@ export default {
   // ミューテーションやアクション
   methods: {
     init () {
-      this.$store.dispatch('clearMemos')
+      this.$store.dispatch('memos/clear')
     },
     start () {
-      this.$store.dispatch('startMemosListener', { million: true })
+      this.$store.dispatch('memos/startListener')
     },
     stop () {
-      this.$store.dispatch('stopMemosListener')
+      this.$store.dispatch('memos/stopListener')
     },
     search () {
       console.log('メモを検索する')
     },
     remove (id) {
-      this.$store.dispatch('deleteMemo', { id })
-    },
-    updateMillion (id) {
-      this.$store.dispatch('updateMillionOfMemo', { id })
+      this.$store.dispatch('memos/deleteMemo', { id })
     }
   },
   // computedは結果がキャッシュされる
@@ -79,7 +68,7 @@ export default {
   // ゲッター
   computed: {
     memos () {
-      return this.$store.getters.memos
+      return this.$store.getters['memos/data']
     }
   }
 }

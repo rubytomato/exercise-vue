@@ -23,7 +23,7 @@
           <div class="card-footer text-right">
             <button class="btn"
               v-bind:class="{'btn-primary': memo.million, 'btn-success': !memo.million}"
-              v-on:click="updateMillion()">
+              v-on:click="updateMillion(memo.million)">
               {{ millionButtonLabel }}
             </button>
             <button class="btn btn-primary"
@@ -51,7 +51,7 @@ export default {
   props: ['id'],
   created () {
     // for debug
-    console.log(this.routeInfo)
+    console.log('created !!', this.routeInfo)
   },
   mounted () {
     this.init()
@@ -63,7 +63,7 @@ export default {
   // コンポーネント内ガード
   // このコンポーネントを描画するルートが確立する前に呼ばれます
   beforeRouteEnter (to, from, next) {
-  // `this` でのこのコンポーネントへのアクセスはできません
+    // `this` でのこのコンポーネントへのアクセスはできません
     next()
   },
   // コンポーネント内ガード
@@ -77,24 +77,24 @@ export default {
   // コンポーネント内ガード
   // このコンポーネントを描画するルートが間もなくナビゲーションから離れていく時に呼ばれます
   beforeRouteLeave (to, from, next) {
-  // `this` でのコンポーネントインスタンスへのアクセスができます
+    // `this` でのコンポーネントインスタンスへのアクセスができます
     next()
   },
   methods: {
     init () {
-      this.$store.dispatch('clearMemo')
+      this.$store.dispatch('memo/clear')
     },
     start () {
-      this.$store.dispatch('startMemoListener', { id: this.targetId })
+      this.$store.dispatch('memo/startListener', { id: this.targetId })
     },
     stop () {
-      this.$store.dispatch('stopMemosListener')
+      this.$store.dispatch('memo/stopListener')
     },
-    updateMillion () {
-      this.$store.dispatch('updateMillionOfMemo', { id: this.memo.id })
+    updateMillion (million) {
+      this.$store.dispatch('memo/updateMillion')
     },
     updatePlatform (platform) {
-      this.$store.dispatch('updatePlatformOfMemo', { id: this.memo.id, platform: platform })
+      this.$store.dispatch('memo/updatePlatforms', { platform: platform })
     },
     getTargetPlatformClass (platform) {
       if (!this.memo.platforms || this.memo.platforms.length === 0) {
@@ -108,10 +108,7 @@ export default {
   },
   computed: {
     memo () {
-      if (!this.targetId) {
-        return CONSTANTS.ERROR_MEMO
-      }
-      return this.$store.getters.memo
+      return this.$store.getters['memo/data']
     },
     platforms () {
       return CONSTANTS.PLATFORMS
@@ -132,6 +129,13 @@ export default {
     },
     millionButtonLabel () {
       return !this.memo.million ? 'is Million ?' : 'is not Million ?'
+    }
+  },
+  watch: {
+    'memo' (n, o) {
+      if (!n) {
+        this.$router.push('/memo-list')
+      }
     }
   }
 }

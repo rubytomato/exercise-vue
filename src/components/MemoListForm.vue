@@ -32,11 +32,10 @@ export default {
       if (!this.memo.title || !this.memo.description) {
         return
       }
-      console.dir(this.memo)
       this.memo.platforms = []
       this.memo.million = false
       this.memo.releasedAt = new Date()
-      this.$store.dispatch('addMemo', this.memo)
+      this.$store.dispatch('memos/addMemo', this.memo)
       this.memo = this.emptyMemo()
     },
     emptyMemo () {
