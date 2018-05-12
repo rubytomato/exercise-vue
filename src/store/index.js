@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import memo from '@/store/modules/Memo'
-import memos from '@/store/modules/Memos'
+import memo from '@/store/modules/memo'
+import memos from '@/store/modules/memos'
 
 Vue.use(Vuex)
 
