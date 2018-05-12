@@ -1,5 +1,6 @@
 import CONSTANTS from '@/constants'
 import firestore from '@/firebase/firestore'
+import { MEMO_SET } from '@/store/modules/mutation-types'
 
 // firebase.firestore.Firestore.collection(collectionPath)
 // returns firebase.firestore.CollectionReference
@@ -14,7 +15,7 @@ export default {
     }
   },
   mutations: {
-    set (state, payload) {
+    [MEMO_SET] (state, payload) {
       state.data = payload
     }
   },
@@ -25,7 +26,7 @@ export default {
   },
   actions: {
     clear ({ commit }) {
-      commit('set', CONSTANTS.NEW_EMPTY_MEMO())
+      commit(MEMO_SET, CONSTANTS.NEW_EMPTY_MEMO())
     },
     startListener ({ commit }, payload) {
       console.log('start Listener')
@@ -37,8 +38,9 @@ export default {
       this.unsubscribe = memosRef.doc(payload.id)
         // DocumentSnapshot
         .onSnapshot(docSnapshot => {
+          let payload = null
           if (docSnapshot.exists) {
-            const payload = {
+            payload = {
               id: docSnapshot.id,
               title: docSnapshot.data().title,
               description: docSnapshot.data().description,
@@ -46,10 +48,8 @@ export default {
               million: docSnapshot.data().million,
               releasedAt: new Date(docSnapshot.data().releasedAt.seconds * 1000)
             }
-            commit('set', payload)
-          } else {
-            commit('set', null)
           }
+          commit(MEMO_SET, payload)
         })
     },
     stopListener () {

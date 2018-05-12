@@ -7,6 +7,7 @@ import SimpleForm from '@/pages/SimpleForm'
 import GridView from '@/pages/GridView'
 import PopperView from '@/pages/PopperView'
 import CheckOut from '@/pages/CheckOut'
+import SignIn from '@/pages/SignIn'
 
 Vue.use(Router)
 
@@ -35,6 +36,14 @@ const router = new Router({
       props: true,
       meta: {
         title: 'details of memo'
+      }
+    },
+    {
+      path: '/sign-in',
+      name: 'SignIn',
+      component: SignIn,
+      meta: {
+        title: 'sign in'
       }
     },
     {

@@ -1,4 +1,5 @@
 import firestore from '@/firebase/firestore'
+import { MEMOS_INIT, MEMOS_ADD, MEMOS_SET, MEMOS_REMOVE } from '@/store/modules/mutation-types'
 
 // firebase.firestore.Firestore.collection(collectionPath)
 // returns firebase.firestore.CollectionReference
@@ -13,22 +14,22 @@ export default {
     }
   },
   mutations: {
-    init (state, payload) {
+    [MEMOS_INIT] (state, payload) {
       state.data = payload
     },
-    add (state, payload) {
+    [MEMOS_ADD] (state, payload) {
       state.data.push(payload)
       state.data.sort((a, b) => {
         return a.releasedAt.getTime() - b.releasedAt.getTime()
       })
     },
-    set (state, payload) {
+    [MEMOS_SET] (state, payload) {
       const index = state.data.findIndex(memo => memo.id === payload.id)
       if (index !== -1) {
         state.data[index] = payload
       }
     },
-    remove (state, payload) {
+    [MEMOS_REMOVE] (state, payload) {
       const index = state.data.findIndex(memo => memo.id === payload.id)
       if (index !== -1) {
         state.data.splice(index, 1)
@@ -42,7 +43,7 @@ export default {
   },
   actions: {
     clear ({ commit }) {
-      commit('init', [])
+      commit(MEMOS_INIT, [])
     },
     startListener ({ commit }) {
       console.log('start listener')
@@ -64,11 +65,11 @@ export default {
               releasedAt: new Date(change.doc.data().releasedAt.seconds * 1000)
             }
             if (change.type === 'added') {
-              commit('add', payload)
+              commit(MEMOS_ADD, payload)
             } else if (change.type === 'modified') {
-              commit('set', payload)
+              commit(MEMOS_SET, payload)
             } else if (change.type === 'removed') {
-              commit('remove', payload)
+              commit(MEMOS_REMOVE, payload)
             }
           })
         },

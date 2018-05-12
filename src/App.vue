@@ -3,6 +3,7 @@
     <div class="header mb-3">
       <div>
         <router-link to="/" class="badge badge-primary">Home</router-link>
+        <router-link v-bind:to="{name: 'SignIn'}" class="badge badge-primary">Sign In</router-link>
         <router-link to="/memo-list" class="badge badge-primary">Memo List</router-link>
         <router-link v-bind:to="{name: 'SimpleForm'}" class="badge badge-primary">Simple Form</router-link>
         <router-link to="/grid-view" class="badge badge-primary">Grid View</router-link>
