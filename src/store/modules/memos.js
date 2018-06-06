@@ -53,9 +53,9 @@ export default {
         this.unsubscribe = null
       }
       this.unsubscribe = memosRef.orderBy('releasedAt', 'asc')
-        // QuerySnapshot
+        // firebase.firestore.QuerySnapshot
         .onSnapshot(querySnapshot => {
-          querySnapshot.docChanges.forEach(change => {
+          querySnapshot.docChanges().forEach(change => {
             const payload = {
               id: change.doc.id,
               title: change.doc.data().title,

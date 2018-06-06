@@ -14,7 +14,7 @@
       <div class="col">
         <p>{{ method1() }}</p>
         <p>{{ method2='テスト' }}</p>
-      </div>)
+      </div>
     </div>
   </div>
 </template>
