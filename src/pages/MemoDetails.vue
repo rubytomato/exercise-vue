@@ -53,13 +53,6 @@ export default {
     // for debug
     console.log('created !!', this.routeInfo)
   },
-  mounted () {
-    this.init()
-    this.start()
-  },
-  destroyed () {
-    this.stop()
-  },
   // コンポーネント内ガード
   // このコンポーネントを描画するルートが確立する前に呼ばれます
   beforeRouteEnter (to, from, next) {
@@ -71,7 +64,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     // `this` でのコンポーネントインスタンスへのアクセスができます
     // pathの:idを直接書き換えたときの対応
-    this.targetId = to.params.id
+    this.targetId = parseInt(to.params.id, 10)
     next()
   },
   // コンポーネント内ガード
@@ -81,22 +74,13 @@ export default {
     next()
   },
   methods: {
-    init () {
-      this.$store.dispatch('memo/clear')
-    },
-    start () {
-      this.$store.dispatch('memo/startListener', { id: this.targetId })
-    },
-    stop () {
-      this.$store.dispatch('memo/stopListener')
-    },
     updateMillion (million) {
-      this.$store.dispatch('memo/updateMillion')
+      this.$store.dispatch('memos/updateMillion', { id: this.targetId })
     },
     updatePlatform (platform) {
-      this.$store.dispatch('memo/updatePlatforms', { platform: platform })
+      this.$store.dispatch('memos/updatePlatforms', { id: this.targetId, platform: platform })
         .then(() => {
-          console.log('memo/updatePlatforms')
+          console.log('updatePlatforms complete')
         })
     },
     getTargetPlatformClass (platform) {
@@ -111,7 +95,7 @@ export default {
   },
   computed: {
     memo () {
-      return this.$store.getters['memo/data']
+      return this.$store.getters['memos/byId'](this.targetId)
     },
     platforms () {
       return CONSTANTS.PLATFORMS

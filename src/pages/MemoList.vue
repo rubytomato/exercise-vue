@@ -12,7 +12,7 @@
         v-for="(memo, index) in memos"
         v-bind:key="index"
         v-on:click="remove(memo.id)">
-        {{ index }}
+        {{ memo.id }}
       </button>
     </div>
   </div>
@@ -33,29 +33,12 @@ export default {
     }
   },
   created () {
+    // for debug
     console.log('created !!', this.routeInfo)
-  },
-  mounted () {
-    console.log('mounted !!')
-    this.init()
-    this.start()
-  },
-  destroyed () {
-    console.log('destroyed !!')
-    this.stop()
   },
   // 再描画が起きると常に関数を実行
   // ミューテーションやアクション
   methods: {
-    init () {
-      this.$store.dispatch('memos/clear')
-    },
-    start () {
-      this.$store.dispatch('memos/startListener')
-    },
-    stop () {
-      this.$store.dispatch('memos/stopListener')
-    },
     search () {
       console.log('メモを検索する')
     },
@@ -68,7 +51,7 @@ export default {
   // ゲッター
   computed: {
     memos () {
-      return this.$store.getters['memos/data']
+      return this.$store.getters['memos/all']
     }
   }
 }
